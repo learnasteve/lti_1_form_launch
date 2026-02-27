@@ -1,12 +1,14 @@
 # LTI MVP (FastAPI)
 
-A minimal LTI 1.1 launch receiver for testing.
+A minimal LTI 1.1 launcher/receiver for testing.
 
 ## What it does
 - Receives and validates LTI 1.1 launches at `POST /lti/launch`
 - Verifies OAuth 1.0 HMAC-SHA1 signatures
 - Checks timestamp skew and blocks nonce re-use within the running process
-- Includes `/self-test` to post a signed launch back to itself
+- Includes `/self-test` to post a signed launch
+- If `LTI_URL` is set, `/self-test` posts to that external endpoint (for example Avery)
+- If `LTI_URL` is blank, `/self-test` posts back to this app
 
 ## Run with Docker Compose
 
@@ -19,14 +21,20 @@ A minimal LTI 1.1 launch receiver for testing.
    LTI_CONSUMER_KEY_1=your-key
    LTI_SHARED_SECRET_1=your-secret
    ```
-3. Start it:
+3. For Avery, also set:
+   ```env
+   LTI_URL=https://dev.let.media.kyoto-u.ac.jp/avery_analytics/lti/login
+   ```
+4. Start it:
    ```bash
    docker compose up --build
    ```
-4. Open:
+5. Open:
    - `http://localhost:7999/`
    - `http://localhost:7999/self-test`
 
 ## Notes
-- If your LMS launches to a public tunnel/proxy URL, set `PUBLIC_BASE_URL` to that exact public base URL. OAuth signatures are sensitive to the full URL.
+- `LTI_URL` controls the outbound launch target for `/self-test`.
+- `PUBLIC_BASE_URL` controls the URL this app uses for validating inbound launches to its own `/lti/launch` endpoint.
+- When posting to Avery, the signature is generated against `LTI_URL`, so it must exactly match Avery's configured validation URL.
 - This is intentionally stateless and does not include DB, sessions, Google auth, or any other Huanui features.
