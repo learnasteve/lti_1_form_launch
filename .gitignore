@@ -1,0 +1,25 @@
+# General
+.DS_Store
+__pycache__/
+
+# Virtual environment
+venv/
+env/
+
+# Jupyter notebook
+.ipynb_checkpoints
+
+# Environment variables
+.env
+.env.dev
+
+# Google Cloud credentials
+tammy-tahi-3b4504770c58.json
+
+# ignore all db back ups
+*.sql
+*.sql.gz
+
+.vscode/
+
+.pgdump
