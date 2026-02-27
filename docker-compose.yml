@@ -1,0 +1,11 @@
+services:
+  lti-mvp:
+    build: .
+    container_name: lti-mvp
+    env_file:
+      - .env
+    ports:
+      - "7999:7999"
+    volumes:
+      - ./app:/app/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 7999 --reload
